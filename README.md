@@ -12,7 +12,7 @@ conda activate disaster-response
 pip install -r requirements.txt
 ```
 ## Project motivation
-The motivation for this project is to finish a full work flow of a data scientist. It includes many stesp:
+The motivation for this project is to finish a full work flow of a data scientist. The following steps are all part of this project:
 * Getting data from multiple sources
 * ETL data
 * EDA
