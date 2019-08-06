@@ -25,6 +25,15 @@ import sys
 
 
 def load_data(database_filepath):
+    '''
+    Load cleansed data from sqlite database
+    Input:
+        database_filepath: file path to saved sqlite database
+    Output:
+        X: messages for categorization
+        y: category of message
+        category_names: available cateogires
+    '''
     engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql_table('messages',engine)
     X = df['message']
@@ -34,6 +43,13 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    Customize tokenization function that normalize, lemmatize and tokenize text
+    Input:
+        text: input messages
+    Output:
+        clean_words: normalized, lemmatized, and tokenized text
+    '''
     text = re.sub('[^a-zA-Z0-9]',' ',text)
     words = word_tokenize(text)
     words = [w for w in words if w not in stopwords.words('english')]
@@ -46,30 +62,35 @@ def tokenize(text):
 
     return clean_words
 
+def build_model():
+    '''
+    Build machine learning pipleines and use GridSearchCV to find the best parameters
+    Output:
+        cv: model with best parameters
+    '''
+    pipeline = Pipeline([
+        ('vect',CountVectorizer(tokenizer=tokenize)),
+        ('tfidf',TfidfTransformer()),
+        ('clf',MultiOutputClassifier(RandomForestClassifier()))
+    ])
+
+    parameters = {
+        'clf__estimator__n_estimators':[100,200],
+        'clf__estimator__min_samples_split':[2,3,4],
+        'clf__estimator__criterion': ['entropy', 'gini']
+        }
+
+    cv = GridSearchCV(pipeline, param_grid=parameters,verbose = 2, n_jobs=-1)
+
+    return cv
+
 # def build_model():
 #     pipeline = Pipeline([
 #         ('vect',CountVectorizer(tokenizer=tokenize)),
 #         ('tfidf',TfidfTransformer()),
-#         ('clf',MultiOutputClassifier(RandomForestClassifier()))
+#         ('clf',MultiOutputClassifier(AdaBoostClassifier()))
 #     ])
-#
-#     parameters = {
-#         'clf__estimator__n_estimators':[100,200],
-#         'clf__estimator__min_samples_split':[2,3,4],
-#         'clf__estimator__criterion': ['entropy', 'gini']
-#         }
-#
-#     cv = GridSearchCV(pipeline, param_grid=parameters,verbose = 2, n_jobs=-1)
-#
-#     return cv
-
-def build_model():
-    pipeline = Pipeline([
-        ('vect',CountVectorizer(tokenizer=tokenize)),
-        ('tfidf',TfidfTransformer()),
-        ('clf',MultiOutputClassifier(AdaBoostClassifier()))
-    ])
-    return pipeline
+#     return pipeline
 
 
 def evaluate_model(model, X_test, y_test, category_names):
