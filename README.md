@@ -1,8 +1,22 @@
 # Disaster Response Pipeline Project
-1. Installation
-2. Project motivation
+1. Project motivation
+2. Installation
 3. File descriptions
 4. Instructions
+
+## Project motivation
+This project attempts to build data pipelines that take in free-text messages that are scraped from social network during disaster times, and classify them using 36 pre-defined categories. Pipelines like this can help governments and organizations quickly response to disasters and focus their attention where they are needed the most.
+
+This project will build an ETL pipeline that read in messages and their label categories, clean and transform them for ML use and load them to a SQLite database. Then a machine learning pipeline will take over to load in data, engineer features and train machine learning model. Trained model that has been optimized will be save to a file. A web application will allow user to use the trained model by predicting categories for user input messages.
+
+The personal motivation for this project is to finish a full work flow of a data scientist. The following steps are all part of this project:
+* Getting data from multiple sources
+* ETL data
+* EDA
+* Feature engineering and extraction
+* Model selection and evaluation
+* Model tuning
+* Building an user facing app
 
 ## Installation
 Create virtual environment and install required packages
@@ -11,15 +25,7 @@ conda create -n disaster-response
 conda activate disaster-response
 pip install -r requirements.txt
 ```
-## Project motivation
-The motivation for this project is to finish a full work flow of a data scientist. The following steps are all part of this project:
-* Getting data from multiple sources
-* ETL data
-* EDA
-* Feature engineering and extraction
-* Model selection and evaluation
-* Model tuning
-* Building an user facing app
+
 
 ## File descriptions
 1. app
